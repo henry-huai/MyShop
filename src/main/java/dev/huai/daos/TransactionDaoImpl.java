@@ -1,20 +1,23 @@
 package dev.huai.daos;
 
+import dev.huai.models.Transaction;
 import dev.huai.models.User;
 import dev.huai.services.SessionService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class UserDaoImpl implements UserDao{
+import java.util.ArrayList;
+
+public class TransactionDaoImpl implements TransactionDao{
     private static SessionFactory sessionFactory = SessionService.getSessionFactory();
     private static Session sessionObj;
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addTransaction(Transaction transaction) {
         try{
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            sessionObj.save(user);
+            sessionObj.save(transaction);
             sessionObj.getTransaction().commit();
             return true;
         }catch(Exception sqlException){
@@ -32,17 +35,12 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public boolean updateUserPassword(String password) {
-        return false;
-    }
-
-    @Override
-    public boolean updateBalance(User user) {
-        return false;
-    }
-
-    @Override
-    public User getUserByCredential(Integer user_id, String password) {
+    public ArrayList<Transaction> getPaidTransactionsByUser(User user) {
         return null;
+    }
+
+    @Override
+    public boolean updateTransactionToPaid(Transaction transaction) {
+        return false;
     }
 }

@@ -11,7 +11,7 @@ public interface TransactionDao {
 
     public ArrayList<Transaction> getPaidTransactionsByUser(User user);
 
-    public boolean updateTransactionPaid(Transaction transaction);
+    public boolean updateTransactionToPaid(Transaction transaction);
 
 
 }

@@ -26,6 +26,9 @@ create table transactions (
 	transaction_id serial primary key,
 	transaction_date timestamp,
 	product_id serial references products,
+	is_paid boolean default false,
 	quantity int not null
 );
+
+
 
