@@ -24,22 +24,23 @@ public class TransactionDaoImplTest {
         Product product = new Product();
         product.setProductPrice(price);
         product.setProductName("Apple");
-        product.setProductId(1);
+        product.setProductId(4);
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
-        transaction.setQuantity(2);
+        transaction.setQuantity(3);
         transaction.setUser(user);
         assertTrue(transactionDao.addTransaction(transaction));
 
     }
     @Test
     public void testGetPaidTransactionsByUser(){
+        assertNotNull(transactionDao.getPaidTransactionsByUser(1));
 
     }
 
     @Test
     public void testUpdateTransactionToPaid(){
-
+        assertTrue(transactionDao.updateTransactionToPaid(1));
     }
 
 }

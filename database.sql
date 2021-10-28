@@ -17,7 +17,7 @@ create table users (
 
 create table products (
 	product_id serial primary key,
-	product_name varchar(30) not null,
+	product_name varchar(30) not null unique,
 	product_price Numeric(12,2) not null
 );
 

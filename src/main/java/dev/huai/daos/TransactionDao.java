@@ -9,9 +9,9 @@ public interface TransactionDao {
 
     public boolean addTransaction(Transaction transaction);
 
-    public ArrayList<Transaction> getPaidTransactionsByUser(User user);
+    public ArrayList<Transaction> getPaidTransactionsByUser(Integer user_id);
 
-    public boolean updateTransactionToPaid(Transaction transaction);
+    public boolean updateTransactionToPaid(Integer transaction_id);
 
 
 }

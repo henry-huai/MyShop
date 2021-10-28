@@ -1,5 +1,8 @@
 package dev.huai.models;
 
+import jakarta.validation.groups.Default;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -7,7 +10,7 @@ import java.sql.Timestamp;
 @Table(name = "transactions", schema = "shopping_app")
 public class Transaction {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -17,6 +20,7 @@ public class Transaction {
     private int transactionId;
 
     @Column(name = "transaction_date")
+    @CreationTimestamp
     private Timestamp transactionDate;
 
     @ManyToOne
@@ -25,6 +29,17 @@ public class Transaction {
 
     @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "is_paid")
+    private boolean is_paid;
+
+    public boolean isIs_paid() {
+        return is_paid;
+    }
+
+    public void setIs_paid(boolean is_paid) {
+        this.is_paid = is_paid;
+    }
 
     public User getUser() {
         return user;
@@ -64,5 +79,17 @@ public class Transaction {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "user=" + user +
+                ", transactionId=" + transactionId +
+                ", transactionDate=" + transactionDate +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", is_paid=" + is_paid +
+                '}';
     }
 }

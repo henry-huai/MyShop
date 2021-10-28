@@ -15,19 +15,18 @@ public class ProductDaoImplTest {
         BigDecimal price = new BigDecimal("1.99");
         Product product = new Product();
         product.setProductPrice(price);
-        product.setProductName("Apple");
+        product.setProductName("Watermelon");
         assertTrue(productDao.addProduct(product));
     }
 
     @Test
     public void testDeleteProduct(){
-
+        assertTrue(productDao.deleteProductById(7));
     }
 
     @Test
     public void testUpdateProduct(){
-
-
+        assertTrue(productDao.updateProductPrice(1, new BigDecimal(1)));
     }
 
 }

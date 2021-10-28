@@ -1,5 +1,7 @@
 package dev.huai.models;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -30,6 +32,20 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    public User(){
+        super();
+    }
+
+    public User(int userId, String firstName, String lastName, String password, boolean isManager, String email) {
+        super();
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.isManager = isManager;
+        this.email = email;
+    }
 
     public int getUserId() {
         return userId;
@@ -92,7 +108,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId && isManager == user.isManager && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password) && Objects.equals(balance, user.balance) && Objects.equals(email, user.email);
+        return userId == user.userId && isManager == user.isManager && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password)  && Objects.equals(email, user.email);
     }
 
     @Override
