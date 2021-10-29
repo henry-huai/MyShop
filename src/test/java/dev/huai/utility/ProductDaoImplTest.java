@@ -1,4 +1,4 @@
-package dev.huai.services;
+package dev.huai.utility;
 import dev.huai.daos.ProductDao;
 import dev.huai.daos.ProductDaoImpl;
 import dev.huai.models.Product;
@@ -12,10 +12,10 @@ public class ProductDaoImplTest {
 
     @Test
     public void testAddProduct(){
-        BigDecimal price = new BigDecimal("1.99");
+        BigDecimal price = new BigDecimal("0.99");
         Product product = new Product();
         product.setProductPrice(price);
-        product.setProductName("Watermelon");
+        product.setProductName("Banana");
         assertTrue(productDao.addProduct(product));
     }
 

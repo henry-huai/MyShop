@@ -1,11 +1,12 @@
 package dev.huai.models;
 
-import jakarta.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Component
 @Entity
 @Table(name = "transactions", schema = "shopping_app")
 public class Transaction {

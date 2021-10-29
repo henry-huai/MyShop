@@ -1,15 +1,19 @@
 package dev.huai.daos;
 
 import dev.huai.models.User;
-import dev.huai.services.SessionService;
+import dev.huai.utility.HibernateUtility;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 
+@Repository
 public class UserDaoImpl implements UserDao{
-    private static SessionFactory sessionFactory = SessionService.getSessionFactory();
+    @Autowired
+    private static SessionFactory sessionFactory = HibernateUtility.getSessionFactory();
     private static Session sessionObj;
 
     @Override
@@ -38,7 +42,7 @@ public class UserDaoImpl implements UserDao{
         try{
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            User user = (User)sessionObj.get(User.class, user_id);
+            User user = sessionObj.get(User.class, user_id);
             user.setPassword(newPassword);
             sessionObj.update(user);
             sessionObj.getTransaction().commit();
@@ -61,7 +65,7 @@ public class UserDaoImpl implements UserDao{
         try{
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            User user = (User)sessionObj.get(User.class, user_id);
+            User user = sessionObj.get(User.class, user_id);
             user.setBalance(user.getBalance().add(deposit));
             sessionObj.update(user);
             sessionObj.getTransaction().commit();
@@ -81,7 +85,7 @@ public class UserDaoImpl implements UserDao{
         try{
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            User user = (User)sessionObj.get(User.class, user_id);
+            User user = sessionObj.get(User.class, user_id);
             // Check if there is enough fund for purchasing
             if(user.getBalance().subtract(cash_out_amount).compareTo(new BigDecimal(0)) < 0)
                 return false;
@@ -105,7 +109,7 @@ public class UserDaoImpl implements UserDao{
     public User getUserByCredential(Integer user_id, String password) {
         try{
             sessionObj = sessionFactory.openSession();
-            User user = (User)sessionObj.get(User.class, user_id);
+            User user = sessionObj.get(User.class, user_id);
             System.out.println(user.toString());
             if(user.getPassword().equals(password))
                 return user;

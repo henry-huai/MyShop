@@ -1,16 +1,17 @@
-package dev.huai.services;
+package dev.huai.utility;
 
 
+import org.hibernate.SessionFactory;
 import org.junit.Test;
 
 import static junit.framework.TestCase.*;
 
 public class SessionServiceTest {
-    SessionService sessionService = new SessionService();
+    private static SessionFactory sessionFactory = HibernateUtility.getSessionFactory();
 
 //https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
     @Test
     public void testGetSessionFactory() {
-        assertEquals(true, sessionService.getSessionFactory().openSession().isConnected());
+        assertEquals(true, sessionFactory.openSession().isConnected());
     }
 }

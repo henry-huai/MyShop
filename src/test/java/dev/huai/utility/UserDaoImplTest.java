@@ -1,4 +1,4 @@
-package dev.huai.services;
+package dev.huai.utility;
 
 import dev.huai.daos.UserDao;
 import dev.huai.daos.UserDaoImpl;
@@ -17,7 +17,7 @@ public class UserDaoImplTest {
         user.setLastName("A");
         user.setFirstName("B");
         user.setPassword("1234");
-        user.setEmail("A@gmail.com");
+        user.setEmail("C@gmail.com");
         assertTrue(userDao.addUser(user));
     }
 
@@ -38,7 +38,7 @@ public class UserDaoImplTest {
 
     @Test
     public void TestGetUserByCredential(){
-        assertEquals(new User(1,"B", "A", "4567", false, "A@gmail.com"), userDao.getUserByCredential(1, "4567"));
+        assertEquals(new User(2,"B", "A", "1234", false, "A@gmail.com"), userDao.getUserByCredential(2, "1234"));
 
     }
 

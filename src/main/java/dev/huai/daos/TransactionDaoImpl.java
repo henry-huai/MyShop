@@ -2,19 +2,22 @@ package dev.huai.daos;
 
 import dev.huai.models.Transaction;
 import dev.huai.models.User;
-import dev.huai.services.SessionService;
-import org.hibernate.Criteria;
+import dev.huai.utility.HibernateUtility;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@Repository
 public class TransactionDaoImpl implements TransactionDao{
-    private static SessionFactory sessionFactory = SessionService.getSessionFactory();
+    private static SessionFactory sessionFactory = HibernateUtility.getSessionFactory();
     private static Session sessionObj;
 
     @Override
@@ -40,23 +43,28 @@ public class TransactionDaoImpl implements TransactionDao{
         try{
             ArrayList<Transaction> transactionsList = new ArrayList<>();
             sessionObj = sessionFactory.openSession();
-            sessionObj.beginTransaction();
-            User user = (User) sessionObj.get(User.class, user_id);
+            User user = sessionObj.get(User.class, user_id);
             if(user == null)
                 return null;
-            Criteria criteria = sessionObj.createCriteria(Transaction.class)
-                            .add(Restrictions.eq("user", user))
-                    .add(Restrictions.eq("is_paid", true));
+            // criteria for hibernate 4
+//            Criteria criteria = sessionObj.createCriteria(Transaction.class)
+//                            .add(Restrictions.eq("user", user))
+//                    .add(Restrictions.eq("is_paid", true));
+
+            CriteriaBuilder builder = sessionObj.getCriteriaBuilder();
+            CriteriaQuery<Transaction> query = builder.createQuery(Transaction.class);
+            Root<Transaction> root = query.from(Transaction.class);
+            query.select(root);
+            query.where(builder.equal(root.get("user"), user)).where(builder.equal(root.get("is_paid"), true));
+            Query<Transaction> criteria=sessionObj.createQuery(query);
             for(Iterator iterator = criteria.list().iterator(); iterator.hasNext();){
                 Transaction transaction = (Transaction) iterator.next();
                 transactionsList.add(transaction);
                 System.out.println(transaction.toString());
             }
-            sessionObj.getTransaction().commit();
             return transactionsList;
         } catch (HibernateException e) {
             e.printStackTrace();
-            sessionObj.getTransaction().rollback();
         }finally {
             if(sessionObj!=null)
                 sessionObj.close();
@@ -69,7 +77,7 @@ public class TransactionDaoImpl implements TransactionDao{
         try{
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
-            Transaction transaction = (Transaction) sessionObj.get(Transaction.class, transaction_id);
+            Transaction transaction = sessionObj.get(Transaction.class, transaction_id);
             if(transaction == null)
                 return false;
             transaction.setIs_paid(true);

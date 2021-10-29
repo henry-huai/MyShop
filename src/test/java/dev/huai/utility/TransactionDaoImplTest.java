@@ -1,4 +1,4 @@
-package dev.huai.services;
+package dev.huai.utility;
 import dev.huai.daos.TransactionDao;
 import dev.huai.daos.TransactionDaoImpl;
 import dev.huai.models.Product;
@@ -6,7 +6,6 @@ import dev.huai.models.Transaction;
 import dev.huai.models.User;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import static junit.framework.TestCase.*;
 public class TransactionDaoImplTest {
 
@@ -15,19 +14,12 @@ public class TransactionDaoImplTest {
     @Test
     public void testAddTransaction(){
         User user = new User();
-        user.setLastName("Huai");
-        user.setFirstName("Renhan");
-        user.setPassword("1234");
-        user.setEmail("renhan@gmail.com");
         user.setUserId(1);
-        BigDecimal price = new BigDecimal("1.99");
         Product product = new Product();
-        product.setProductPrice(price);
-        product.setProductName("Apple");
-        product.setProductId(4);
+        product.setProductId(2);
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
-        transaction.setQuantity(3);
+        transaction.setQuantity(5);
         transaction.setUser(user);
         assertTrue(transactionDao.addTransaction(transaction));
 
@@ -40,7 +32,6 @@ public class TransactionDaoImplTest {
 
     @Test
     public void testUpdateTransactionToPaid(){
-        assertTrue(transactionDao.updateTransactionToPaid(1));
+        assertTrue(transactionDao.updateTransactionToPaid(2));
     }
-
 }

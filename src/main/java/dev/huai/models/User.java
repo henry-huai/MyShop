@@ -1,11 +1,12 @@
 package dev.huai.models;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Component
 @Entity
 @Table(name = "users", schema = "shopping_app")
 public class User {

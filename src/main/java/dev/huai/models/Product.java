@@ -1,8 +1,10 @@
 package dev.huai.models;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-
+@Component
 @Entity
 @Table(name = "products", schema = "shopping_app")
 public class Product {
