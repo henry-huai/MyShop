@@ -14,10 +14,10 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "product_name")
+    @Column(name = "product_name", unique = true, nullable = false)
     private String productName;
 
-    @Column(name = "product_price")
+    @Column(name = "product_price", nullable = false)
     private BigDecimal productPrice;
 
     public int getProductId() {

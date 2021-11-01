@@ -16,13 +16,13 @@ public class TransactionDaoImplTest {
         User user = new User();
         user.setUserId(1);
         Product product = new Product();
-        product.setProductId(2);
+        product.setProductId(1);
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
         transaction.setQuantity(5);
         transaction.setUser(user);
+        System.out.println(transaction);
         assertTrue(transactionDao.addTransaction(transaction));
-
     }
     @Test
     public void testGetPaidTransactionsByUser(){

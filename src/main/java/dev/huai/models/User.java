@@ -31,7 +31,7 @@ public class User {
     @Column(name = "balance")
     private BigDecimal balance = BigDecimal.ZERO;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     public User(){

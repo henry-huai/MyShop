@@ -1,14 +1,22 @@
 package dev.huai.daos;
 
+import dev.huai.models.Transaction;
 import dev.huai.models.User;
 import dev.huai.utility.HibernateUtility;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -35,6 +43,22 @@ public class UserDaoImpl implements UserDao{
             }
         }
         return false;
+    }
+
+    @Override
+    public User getUserById(Integer user_id) {
+        try{
+            sessionObj = sessionFactory.openSession();
+            User user = sessionObj.get(User.class, user_id);
+            return user;
+        }catch(Exception sqlException){
+            sqlException.printStackTrace();
+        } finally {
+            if(sessionObj != null) {
+                sessionObj.close();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -110,7 +134,7 @@ public class UserDaoImpl implements UserDao{
         try{
             sessionObj = sessionFactory.openSession();
             User user = sessionObj.get(User.class, user_id);
-            System.out.println(user.toString());
+            //System.out.println(user.toString());
             if(user.getPassword().equals(password))
                 return user;
         } catch (HibernateException e) {
@@ -121,4 +145,25 @@ public class UserDaoImpl implements UserDao{
         }
         return null;
     }
+
+    @Override
+    public List<User> getUserByManager(){
+        try{
+            sessionObj = sessionFactory.openSession();
+            CriteriaBuilder builder = sessionObj.getCriteriaBuilder();
+            CriteriaQuery<User> query = builder.createQuery(User.class);
+            Root<User> root = query.from(User.class);
+            query.select(root);
+            query.where(builder.equal(root.get("isManager"), false));
+            Query<User> criteria=sessionObj.createQuery(query);
+            return criteria.list();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }finally {
+            if(sessionObj!=null)
+                sessionObj.close();
+        }
+        return null;
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -26,5 +27,10 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public boolean deleteProductById(Integer product_id) {
         return productDao.deleteProductById(product_id);
+    }
+
+    @Override
+    public ArrayList<Product> getAllProduct() {
+        return productDao.getAllProduct();
     }
 }

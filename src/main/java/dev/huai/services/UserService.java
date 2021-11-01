@@ -4,10 +4,15 @@ import dev.huai.daos.UserDao;
 import dev.huai.models.User;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface UserService {
 
     public boolean addUser(User user);
+
+    public User getUserById(Integer user_id);
+
+    public List<User> getUserByManager();
 
     public boolean updateUserPassword(Integer user_id, String password);
 
