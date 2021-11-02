@@ -4,6 +4,7 @@ import dev.huai.models.Amount;
 import dev.huai.models.User;
 import dev.huai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,12 +36,22 @@ public class UserController {
     @PostMapping("/user")
     @ResponseBody
     public ResponseEntity<?> getUserByCredential(@RequestBody User user){
-        User returnedUser = userService.getUserByCredential(user.getUserId(), user.getPassword());
+        User returnedUser = userService.getUserByCredential(user.getEmail(), user.getPassword());
         if(returnedUser ==null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         else{
-            return new ResponseEntity<>(returnedUser, HttpStatus.ACCEPTED);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            //1:
+            String str = returnedUser.getUserId() + ":";
+            String token;
+            if(returnedUser.isManager())
+                token = str + "CUSTOMER";
+            else
+                token = str + "MANAGER";
+            responseHeaders.set("Authorization", token);
+            responseHeaders.set("Access-Control-Expose-Headers", "Authorization");
+            return new ResponseEntity<>(returnedUser, responseHeaders, HttpStatus.ACCEPTED);
         }
     }
 

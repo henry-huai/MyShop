@@ -1,8 +1,9 @@
 package dev.huai.controllers;
 
 import dev.huai.models.Transaction;
-import dev.huai.models.User;
+
 import dev.huai.services.TransactionService;
+import dev.huai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -20,6 +22,9 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/transaction")
     @ResponseBody
@@ -42,5 +47,17 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }else
             return new ResponseEntity<>(transactionList, HttpStatus.OK);
+    }
+
+    @PutMapping("/transaction")
+    @ResponseBody
+    public ResponseEntity<?> updateTransactionPaid(@RequestBody Transaction transaction){
+        BigDecimal total = BigDecimal.valueOf(transaction.getQuantity()).multiply(transaction.getProduct().getProductPrice());
+        if(userService.updateBalanceCashOut(transaction.getUser().getUserId(), total)){
+            transactionService.updateTransactionToPaid(transaction.getTransactionId());
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }

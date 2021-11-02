@@ -20,5 +20,5 @@ public interface UserService {
 
     public boolean updateBalanceCashOut(Integer user_id, BigDecimal cash_out_amount);
 
-    public User getUserByCredential(Integer user_id, String password);
+    public User getUserByCredential(String email, String password);
 }

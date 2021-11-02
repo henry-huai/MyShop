@@ -130,10 +130,18 @@ public class UserDaoImpl implements UserDao{
 
 
     @Override
-    public User getUserByCredential(Integer user_id, String password) {
+    public User getUserByCredential(String email, String password) {
         try{
             sessionObj = sessionFactory.openSession();
-            User user = sessionObj.get(User.class, user_id);
+            CriteriaBuilder builder = sessionObj.getCriteriaBuilder();
+            CriteriaQuery<User> query = builder.createQuery(User.class);
+            Root<User> root = query.from(User.class);
+            query.select(root);
+            query.where(builder.equal(root.get("email"), email));
+            Query<User> criteria =sessionObj.createQuery(query);
+            User user = criteria.list().get(0);
+
+            //User user = sessionObj.get(User.class, email);
             //System.out.println(user.toString());
             if(user.getPassword().equals(password))
                 return user;

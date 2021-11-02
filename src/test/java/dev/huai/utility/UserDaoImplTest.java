@@ -38,7 +38,7 @@ public class UserDaoImplTest {
 
     @Test
     public void TestGetUserByCredential(){
-        assertEquals(new User(2,"B", "A", "1234", false, "A@gmail.com"), userDao.getUserByCredential(2, "1234"));
+        assertEquals(new User(2,"B", "A", "1234", false, "A@gmail.com"), userDao.getUserByCredential("", "1234"));
 
     }
 

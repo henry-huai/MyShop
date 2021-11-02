@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserByCredential(Integer user_id, String password) {
-        return userDao.getUserByCredential(user_id, password);
+    public User getUserByCredential(String email, String password) {
+        return userDao.getUserByCredential(email, password);
     }
 }
