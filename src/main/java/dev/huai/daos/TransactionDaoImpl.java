@@ -73,6 +73,40 @@ public class TransactionDaoImpl implements TransactionDao{
     }
 
     @Override
+    public ArrayList<Transaction> getUnpaidTransactionsByUser(Integer user_id) {
+        try{
+            ArrayList<Transaction> transactionsList = new ArrayList<>();
+            sessionObj = sessionFactory.openSession();
+            User user = sessionObj.get(User.class, user_id);
+            if(user == null)
+                return null;
+            // criteria for hibernate 4
+//            Criteria criteria = sessionObj.createCriteria(Transaction.class)
+//                            .add(Restrictions.eq("user", user))
+//                    .add(Restrictions.eq("is_paid", true));
+
+            CriteriaBuilder builder = sessionObj.getCriteriaBuilder();
+            CriteriaQuery<Transaction> query = builder.createQuery(Transaction.class);
+            Root<Transaction> root = query.from(Transaction.class);
+            query.select(root);
+            query.where(builder.equal(root.get("user"), user)).where(builder.equal(root.get("is_paid"), false));
+            Query<Transaction> criteria=sessionObj.createQuery(query);
+            for(Iterator iterator = criteria.list().iterator(); iterator.hasNext();){
+                Transaction transaction = (Transaction) iterator.next();
+                transactionsList.add(transaction);
+                System.out.println(transaction.toString());
+            }
+            return transactionsList;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }finally {
+            if(sessionObj!=null)
+                sessionObj.close();
+        }
+        return null;
+    }
+
+    @Override
     public boolean updateTransactionToPaid(Integer transaction_id) {
         try{
             sessionObj = sessionFactory.openSession();
@@ -93,5 +127,6 @@ public class TransactionDaoImpl implements TransactionDao{
         }
         return false;
     }
+
 
 }

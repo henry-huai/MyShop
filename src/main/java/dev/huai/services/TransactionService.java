@@ -10,4 +10,8 @@ public interface TransactionService {
     public ArrayList<Transaction> getPaidTransactionsByUser(Integer user_id);
 
     public boolean updateTransactionToPaid(Integer transaction_id);
+
+    public boolean updateTransactionToPaidByUserId(Integer user_id);
+
+    public ArrayList<Transaction> getUnpaidTransactionsByUser(Integer user_id);
 }

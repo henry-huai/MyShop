@@ -13,5 +13,7 @@ public interface TransactionDao {
 
     public boolean updateTransactionToPaid(Integer transaction_id);
 
+    public ArrayList<Transaction> getUnpaidTransactionsByUser(Integer user_id);
+
 
 }

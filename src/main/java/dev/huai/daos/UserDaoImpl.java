@@ -111,8 +111,14 @@ public class UserDaoImpl implements UserDao{
             sessionObj.beginTransaction();
             User user = sessionObj.get(User.class, user_id);
             // Check if there is enough fund for purchasing
-            if(user.getBalance().subtract(cash_out_amount).compareTo(new BigDecimal(0)) < 0)
+            System.out.println(user.toString());
+            System.out.println("cash out amount"+cash_out_amount);
+            System.out.println(user.getBalance().subtract(cash_out_amount));
+            if(user.getBalance().subtract(cash_out_amount).compareTo(new BigDecimal(0)) < 0){
+                System.out.println("No enough balance");
                 return false;
+            }
+
             user.setBalance(user.getBalance().subtract(cash_out_amount));
             sessionObj.update(user);
             sessionObj.getTransaction().commit();

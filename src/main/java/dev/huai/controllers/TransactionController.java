@@ -49,12 +49,25 @@ public class TransactionController {
             return new ResponseEntity<>(transactionList, HttpStatus.OK);
     }
 
+    @GetMapping("/unpaidtransactions")
+    @ResponseBody
+    public ResponseEntity<?> getUnpaidTransactionsByUser(){
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String authToken = request.getHeader("Authorization");
+        String[] str = authToken.split(":");
+        List<Transaction> transactionList = transactionService.getUnpaidTransactionsByUser(Integer.parseInt(str[0]));
+        if(transactionList==null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }else
+            return new ResponseEntity<>(transactionList, HttpStatus.OK);
+    }
+
     @PutMapping("/transaction")
     @ResponseBody
     public ResponseEntity<?> updateTransactionPaid(@RequestBody Transaction transaction){
-        BigDecimal total = BigDecimal.valueOf(transaction.getQuantity()).multiply(transaction.getProduct().getProductPrice());
-        if(userService.updateBalanceCashOut(transaction.getUser().getUserId(), total)){
-            transactionService.updateTransactionToPaid(transaction.getTransactionId());
+
+        if(transactionService.updateTransactionToPaidByUserId(transaction.getUser().getUserId())){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
