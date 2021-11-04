@@ -22,7 +22,7 @@ public class ProductController {
     public ResponseEntity<?> addNewProduct(@RequestBody Product product){
         Boolean result = productService.addProduct(product);
         if(result == false){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         }
         else{
             return new ResponseEntity<>(true, HttpStatus.CREATED);

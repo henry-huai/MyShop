@@ -3,9 +3,11 @@ package dev.huai.daos;
 import dev.huai.models.Transaction;
 import dev.huai.models.User;
 import dev.huai.utility.HibernateUtility;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -46,7 +48,7 @@ public class TransactionDaoImpl implements TransactionDao{
             User user = sessionObj.get(User.class, user_id);
             if(user == null)
                 return null;
-            // criteria for hibernate 4
+             //criteria for hibernate 4
 //            Criteria criteria = sessionObj.createCriteria(Transaction.class)
 //                            .add(Restrictions.eq("user", user))
 //                    .add(Restrictions.eq("is_paid", true));
@@ -55,7 +57,8 @@ public class TransactionDaoImpl implements TransactionDao{
             CriteriaQuery<Transaction> query = builder.createQuery(Transaction.class);
             Root<Transaction> root = query.from(Transaction.class);
             query.select(root);
-            query.where(builder.equal(root.get("user"), user)).where(builder.equal(root.get("is_paid"), true));
+            query.where(builder.equal(root.get("user"), user),builder.equal(root.get("is_paid"), true));
+           // query.where(builder.equal(root.get("is_paid"), true));
             Query<Transaction> criteria=sessionObj.createQuery(query);
             for(Iterator iterator = criteria.list().iterator(); iterator.hasNext();){
                 Transaction transaction = (Transaction) iterator.next();
@@ -83,13 +86,13 @@ public class TransactionDaoImpl implements TransactionDao{
             // criteria for hibernate 4
 //            Criteria criteria = sessionObj.createCriteria(Transaction.class)
 //                            .add(Restrictions.eq("user", user))
-//                    .add(Restrictions.eq("is_paid", true));
+//                    .add(Restrictions.eq("is_paid", false));
 
             CriteriaBuilder builder = sessionObj.getCriteriaBuilder();
             CriteriaQuery<Transaction> query = builder.createQuery(Transaction.class);
             Root<Transaction> root = query.from(Transaction.class);
             query.select(root);
-            query.where(builder.equal(root.get("user"), user)).where(builder.equal(root.get("is_paid"), false));
+            query.where(builder.equal(root.get("user"), user), builder.equal(root.get("is_paid"), false));
             Query<Transaction> criteria=sessionObj.createQuery(query);
             for(Iterator iterator = criteria.list().iterator(); iterator.hasNext();){
                 Transaction transaction = (Transaction) iterator.next();

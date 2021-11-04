@@ -46,12 +46,24 @@ public class UserController {
             String str = returnedUser.getUserId() + ":";
             String token;
             if(returnedUser.isManager())
-                token = str + "CUSTOMER";
-            else
                 token = str + "MANAGER";
+            else
+                token = str + "CUSTOMER";
             responseHeaders.set("Authorization", token);
             responseHeaders.set("Access-Control-Expose-Headers", "Authorization");
             return new ResponseEntity<>(returnedUser, responseHeaders, HttpStatus.ACCEPTED);
+        }
+    }
+
+    @GetMapping("/user/{id}")
+    @ResponseBody
+    public ResponseEntity<?> getUserById(@PathVariable("id")int id){
+        User returnedUser = userService.getUserById(id);
+        if(returnedUser == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<>(returnedUser, HttpStatus.ACCEPTED);
         }
     }
 
@@ -92,21 +104,28 @@ public class UserController {
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String authToken = request.getHeader("Authorization");
         String[] str = authToken.split(":");
-        if(amount.getAmount() > 0){
+
             // this is a deposit update
             if(userService.updateBalanceDeposit(Integer.parseInt(str[0]), new BigDecimal(amount.getAmount())))
                 return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
             else
                 return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-        }else{
-            // this is a cash_out update
-            if(userService.updateBalanceCashOut(Integer.parseInt(str[0]), new BigDecimal(-amount.getAmount())))
-                return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
-            else
-                return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-        }
+
     }
 
+    @PutMapping("/password")
+    @ResponseBody
+    public ResponseEntity<?> updatePassword(@RequestBody User user){
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String authToken = request.getHeader("Authorization");
+        String[] str = authToken.split(":");
 
+        // this is a deposit update
+        if(userService.updateUserPassword(Integer.parseInt(str[0]), user.getPassword()))
+            return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+        else
+            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 
+    }
 }

@@ -49,6 +49,17 @@ public class TransactionController {
             return new ResponseEntity<>(transactionList, HttpStatus.OK);
     }
 
+    @GetMapping("/paidtransactions/{id}")
+    @ResponseBody
+    public ResponseEntity<?> getPaidTransactionsById(@PathVariable("id")int id){
+
+        List<Transaction> transactionList = transactionService.getPaidTransactionsByUser(id);
+        if(transactionList==null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }else
+            return new ResponseEntity<>(transactionList, HttpStatus.OK);
+    }
+
     @GetMapping("/unpaidtransactions")
     @ResponseBody
     public ResponseEntity<?> getUnpaidTransactionsByUser(){
