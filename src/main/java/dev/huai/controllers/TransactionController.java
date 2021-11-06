@@ -81,7 +81,18 @@ public class TransactionController {
         if(transactionService.updateTransactionToPaidByUserId(transaction.getUser().getUserId())){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(false,HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @DeleteMapping("/transaction/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteTransactionPaid(@PathVariable("id")int id){
+
+        if(transactionService.deleteTransactionById(id)){
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(false,HttpStatus.UNAUTHORIZED);
         }
     }
 }

@@ -1,5 +1,6 @@
 package dev.huai.daos;
 
+import dev.huai.models.Product;
 import dev.huai.models.Transaction;
 import dev.huai.models.User;
 import dev.huai.utility.HibernateUtility;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,12 +24,70 @@ public class TransactionDaoImpl implements TransactionDao{
     private static SessionFactory sessionFactory = HibernateUtility.getSessionFactory();
     private static Session sessionObj;
 
+//    @Override
+//    public boolean addTransaction(Transaction transaction) {
+//        try{
+//            sessionObj = sessionFactory.openSession();
+//            sessionObj.beginTransaction();
+//            sessionObj.save(transaction);
+//            sessionObj.getTransaction().commit();
+//            return true;
+//        } catch (HibernateException e) {
+//            e.printStackTrace();
+//            sessionObj.getTransaction().rollback();
+//        }finally {
+//            if(sessionObj!=null)
+//                sessionObj.close();
+//        }
+//        return false;
+//    }
     @Override
     public boolean addTransaction(Transaction transaction) {
         try{
+            //check if the product is already in the shopping cart
+            //update the quantity if it's in the shopping cart
+            //add new transaction if not
+            ArrayList<Transaction> transactionsCart = getUnpaidTransactionsByUser(transaction.getUser().getUserId());
             sessionObj = sessionFactory.openSession();
             sessionObj.beginTransaction();
+            if(transactionsCart.size()>0) {
+                System.out.println(transactionsCart.toString());
+                for (Transaction ts : transactionsCart) {
+                    if (ts.getProduct().getProductId() == transaction.getProduct().getProductId()) {
+                        //updating exiting quantity
+                        Transaction existTransaction = sessionObj.get(Transaction.class, ts.getTransactionId());
+                        if(existTransaction == null)
+                            return false;
+                        existTransaction.setQuantity(ts.getQuantity()+ transaction.getQuantity());
+                        sessionObj.update(existTransaction);
+                        sessionObj.getTransaction().commit();
+                        return true;
+                    }
+                }
+            }
+            //add new transaction
             sessionObj.save(transaction);
+            sessionObj.getTransaction().commit();
+            return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            sessionObj.getTransaction().rollback();
+        }finally {
+            if(sessionObj!=null)
+                sessionObj.close();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteTransactionById(Integer transaction_id) {
+        try{
+            sessionObj = sessionFactory.openSession();
+            sessionObj.beginTransaction();
+            Transaction transaction = sessionObj.get(Transaction.class, transaction_id);
+            if(transaction == null)
+                return false;
+            sessionObj.delete(transaction);
             sessionObj.getTransaction().commit();
             return true;
         } catch (HibernateException e) {
@@ -117,6 +177,7 @@ public class TransactionDaoImpl implements TransactionDao{
             Transaction transaction = sessionObj.get(Transaction.class, transaction_id);
             if(transaction == null)
                 return false;
+            transaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
             transaction.setIs_paid(true);
             sessionObj.update(transaction);
             sessionObj.getTransaction().commit();

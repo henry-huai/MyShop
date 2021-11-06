@@ -23,6 +23,11 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
+    public boolean deleteTransactionById(Integer transaction_id) {
+        return transactionDao.deleteTransactionById(transaction_id);
+    }
+
+    @Override
     public ArrayList<Transaction> getPaidTransactionsByUser(Integer user_id) {
         return transactionDao.getPaidTransactionsByUser(user_id);
     }

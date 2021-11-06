@@ -18,21 +18,23 @@ public class HibernateUtility {
 
         if (sessionFactory == null)
         {
-            //Configuration configuration = new Configuration();
 
             Properties settings = new Properties();
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
             String url = System.getenv("Project2DB_URL");
             String username = System.getenv("Project2DB_Username");
             String password = System.getenv("Project2DB_Password");
-//Project2DB_URL=jdbc:postgresql://localhost:5432/postgres;Project2DB_Username=postgres;Project2DB_Password=7499
-            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
-            settings.put(Environment.USER, "postgres");
-            settings.put(Environment.PASS, "7499");
+            String ddl = System.getenv("Project2DDL");
+
+            settings.put(Environment.URL, url);
+            settings.put(Environment.USER, username);
+            settings.put(Environment.PASS, password);
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
             settings.put(Environment.SHOW_SQL, "true");
-            settings.put(Environment.HBM2DDL_AUTO, "update");
+            settings.put(Environment.HBM2DDL_AUTO, ddl);
+            // set to create when first time running
+            // change to validate after
 
             sessionFactory =  new Configuration()
                     .setProperties(settings)

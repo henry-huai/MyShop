@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "transactions", schema = "shopping_app")
 public class Transaction {
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
