@@ -36,5 +36,4 @@ public class AuthAspect {
             return (ResponseEntity<?>) pjp.proceed();
         }
     }
-
 }
