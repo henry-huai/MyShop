@@ -10,23 +10,26 @@ import { BaseURLService } from 'src/app/services/base-url.service';
 export class NaviComponent implements OnInit {
 
   baseWebAppURL:string = "";
+  customer: boolean = false;
 
   @Input()
   manager:boolean=false;
 
-  @Input()
-  customer:boolean=false;
+  // @Input()
+  // customer:boolean=false;
 
   constructor(private router: Router, private urlService: BaseURLService) { }
 
   ngOnInit(): void {
-    //this.baseWebAppURL = this.urlService.getWebAppBaseURL();
+    var token = sessionStorage.getItem("Authorization");
+    if(token){
+      this.customer = true;
+    }
   }
 
   logoutUser()
   {
     sessionStorage.removeItem("Authorization");
-    this.router.navigate(['/'])
   }
 
 

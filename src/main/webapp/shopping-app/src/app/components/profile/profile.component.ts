@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   amount : Amount = {};
   hidden: boolean = false;
   isManager: boolean = false;
+  isCustomer: boolean = false;
   currentPassword: string = "";
   newPassword: string = "";
   newPasswordVerify: string = "";
@@ -28,13 +29,12 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getUserById().subscribe((result)=>{
       this.user = result;
-      console.log(this.user.manager)
-
       if(this.user.manager){
         this.isManager =  true;
         this.status = "MANAGER"
       }else{
         this.status = "CUSTOMER"
+        this.isCustomer = true;
       }
     })
   }

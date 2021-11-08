@@ -13,13 +13,14 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent},
-  { path: '', component: LoginComponent},
+  { path: 'login', component: LoginComponent},
   { path: 'cart', component: CartComponent},
   { path: 'products', component: ProductListComponent},
   { path: 'profile', component: ProfileComponent},
   { path: 'history', component: HistoryTransactionComponent},
   { path: 'manager', component: ManagerHomeComponent},
-  { path: 'customerlist', component: CustomerListComponent}
+  { path: 'customerlist', component: CustomerListComponent},
+  { path: '', component: ProductListComponent}
 ];
 
 @NgModule({

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Product } from '../../models/Product';
 import { Transaction } from '../../models/Transaction';
 import { ProductService } from '../../services/product.service';
@@ -18,7 +19,7 @@ export class ProductComponent implements OnInit {
   @Input()
   productData!: Product;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -41,6 +42,8 @@ export class ProductComponent implements OnInit {
         this.hidden = true;
         this.added = false;
       } 
+    }else{
+      this.router.navigate(['/login'])
     }
   }
 

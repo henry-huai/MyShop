@@ -11,12 +11,14 @@ import { User } from '../../models/User';
 export class RegisterComponent implements OnInit {
 
   user: User = {balance:0};
-  firstname: string = '';
-  lastname: string = '';
-  password: string ='';
-  email: string ='';
+  firstname: string = "";
+  lastname: string = "";
+  password: string ="";
+  passwordVerify: string = "";
+  email: string ="";
   hidden: boolean = false;
   missing: boolean = false;
+  notmatch: boolean = false;
   
   constructor(private router: Router, public registerService:RegisterService) { }
 
@@ -26,11 +28,12 @@ export class RegisterComponent implements OnInit {
   registerUser(){
     if(this.firstname != "" && this.lastname != "" && this.password != "" && this.email != ""){
 
-      this.user.firstName = this.firstname;
-      this.user.lastName = this.lastname;
-      this.user.email = this.email;
-      this.user.password = this.password;
-      this.registerService.registerUser(this.user).subscribe(
+      if(this.password==this.passwordVerify){
+        this.user.firstName = this.firstname;
+        this.user.lastName = this.lastname;
+        this.user.email = this.email;
+        this.user.password = this.password;
+        this.registerService.registerUser(this.user).subscribe(
         (data) => {
           this.router.navigate(['/']);
         },
@@ -38,6 +41,9 @@ export class RegisterComponent implements OnInit {
           this.hidden = true;
         }
       )
+      }else{
+        this.notmatch = true;
+      }
     }else{
       this.missing = true;
     }       

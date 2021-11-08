@@ -2,7 +2,7 @@
 <div class="card" style="width: 18rem;">
     <div class="card-body">
         <h5 class="card-title">{{productData.productName}}</h5>
-        <h6>$ {{productData.productPrice.toFixed(2)}}</h6>
+        <h6>$ {{productData.productPrice.toFixed(2)}}  / pound</h6>
         <h6 hidden>{{productData.productId}}</h6>
         
         <input name="quantity" type="number" class="form-control" placeholder="Enter quantity" [(ngModel)]="quantity">

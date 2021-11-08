@@ -15,18 +15,10 @@ export class ProductListComponent implements OnInit {
   productListData: Product[] = [];
 
   ngOnInit(): void {
-
-    //this.productListData = this.productService.getAllProducts();
-    var token = sessionStorage.getItem("Authorization");
-    if(token){
     this.productService.getAllProducts().subscribe(
       (result) => {console.log(result)
         this.productListData = result;
       }
     )
-      }else{
-        this.router.navigate(['/'])
-      }
   }
-
 }
