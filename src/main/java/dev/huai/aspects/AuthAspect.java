@@ -27,11 +27,11 @@ public class AuthAspect {
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String authToken = request.getHeader("Authorization");
         if(authToken == null && ("getUserByCredential"!= pjp.getSignature().getName()) && ("signUpNewCustomer"!= pjp.getSignature().getName()) && ("getAllProduct"!= pjp.getSignature().getName())){
-            // prevent addNewBreed method from executing
+            
             // return 401 to the client
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            // allow addNewBreed to execute normally
+            
             //logger.info("token received");
             return (ResponseEntity<?>) pjp.proceed();
         }
